@@ -1,0 +1,89 @@
+@inherits LayoutComponentBase
+@inject NavigationManager navMan
+@inject IJSRuntime jrt
+@inject MyHttp Http
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ButtonClicked" />
+        <MudText>PHarga</MudText>
+        <MudAppBarSpacer />
+        <MudIconButton Icon="@Icons.Filled.Settings" Color="Color.Inherit" OnClick="@Button2Clicked" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="@BrowserService.MenuLeft" Anchor="Anchor.Left" Elevation="25">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">PHarga</MudText>
+        </MudDrawerHeader>
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Products")">Products</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Stocks")">Stocks</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Categories")">Category</MudNavLink>
+            <MudNavGroup Title="Sales" Expanded="false">
+                <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Daily")">Daily</MudNavLink>
+                <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Monthly")">Monthly</MudNavLink>
+                <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Yearly")">Yearly</MudNavLink>
+            </MudNavGroup>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudDrawer @bind-Open="@BrowserService.MenuRight" Anchor="Anchor.Right" Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Setting</MudText>
+        </MudDrawerHeader>
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "change")">Change Password</MudNavLink>
+            <MudNavLink Href="@(BrowserService.wwwasset + "Logout")" Match="NavLinkMatch.All">Logout</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent Class="pt-16 px-16">
+        <MudContainer Class="mt-lg-5">
+            <PullToRefresh>
+                @Body
+            </PullToRefresh>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+<MudThemeProvider Theme="MyCustomTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+    {
+        LayoutProperties = new LayoutProperties()
+        {
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px"
+        }
+    };
+
+    async Task Logout()
+    {
+        navMan.NavigateTo("logout");
+    }
+
+    void CloseMenu()
+    {
+    }
+
+    void ButtonClicked()
+    {
+        BrowserService.MenuLeft = !BrowserService.MenuLeft;
+        if (BrowserService.StateHasChanged != null) BrowserService.StateHasChanged();
+    }
+
+    void Button2Clicked()
+    {
+        BrowserService.MenuRight = !BrowserService.MenuRight;
+        if (BrowserService.StateHasChanged != null) BrowserService.StateHasChanged();
+    }
+
+    async void Refresh()
+    {
+        bool a = await jrt.InvokeAsync<bool>("redirect", navMan.Uri.ToString());
+    }
+
+    public async Task Redirect(string url)
+    {
+        bool a = await jrt.InvokeAsync<bool>("redirect", url); ;
+    }
+}

@@ -1,0 +1,95 @@
+﻿@page "/stocks"
+@inherits ProtectedPage
+@inject IJSRuntime jrt
+@inject NavigationManager navMan
+
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudText Typo="Typo.h6">STOCKS</MudText>
+        <hr />
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        @if (Data != null)
+        {
+            <MudTable Items="@Data" Dense="true" Class="ma-0 pa-2" Hover="true" Breakpoint="Breakpoint.Sm">
+                <HeaderContent>
+                    <MudTh Class="ma-0 pa-2">Id</MudTh>
+                    <MudTh Class="ma-0 pa-2">Product Id</MudTh>
+                    <MudTh Class="ma-0 pa-2">Name</MudTh>
+                    <MudTh Class="ma-0 pa-2">Quantity</MudTh>
+                    <MudTh Class="ma-0 pa-2">Price</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Id">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.Id</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Product">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.ProductId</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Name">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.Product?.Name</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Quantity">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.Quantity</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Price">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@string.Format("{0:n2}", context.Product?.Price)</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    Stock[] Data = null;
+    string token = "";
+
+    public Task Redirect(string url)
+    {
+        navMan.NavigateTo(url);
+        return Task.CompletedTask;
+    }
+
+    public async void Refresh()
+    {
+        try
+        {
+            Data = await http.GetFromJsonAsync<Stock[]>("/api/stock/getstocks?page=1");
+        } catch {}
+        if (Data == null)
+        {
+            StockController c = new StockController();
+            Data = c.GetStocks(1);
+        }
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Refresh();
+    }
+}

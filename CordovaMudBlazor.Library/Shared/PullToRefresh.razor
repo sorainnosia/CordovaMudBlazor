@@ -1,0 +1,14 @@
+@inherits LayoutComponentBase
+@inject NavigationManager navMan
+@inject IJSRuntime jrt
+@inject MyHttp Http
+
+<div class="loading-container" style="display: none;">
+    <div id="pullToRefresh" class="loading"></div>
+</div>
+@ChildContent
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -1,0 +1,51 @@
+﻿<MudPaper Class="@Class" Elevation="@Elevation" Outlined="@Outlined">
+    <MudGrid>
+        <MudItem xs="12" lg="3" md="3" sm="12" Style="margin:auto 0;display:inline;">
+            <div style="@(BrowserService.mobile ? "padding-left:24px;padding-top:24px;" : "padding-left:10px")">
+                <MudText Typo="Typo.subtitle1">Page @Page/@TotalPage</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12" lg="9" md="9" sm="12" Style="margin:auto 0;">
+            <div style="@(BrowserService.mobile ? "padding-left:10px;" : "")">
+                <MudIconButton Size="@(BrowserService.mobile ? Size.Medium : Size.Small)" Icon="@Icons.Filled.FirstPage" OnClick="@(() => { if (Page != 1) { Page = 1; } OnPage.InvokeAsync(Page); })"></MudIconButton>
+                <MudIconButton Size="@(BrowserService.mobile ? Size.Medium : Size.Small)" Icon="@Icons.Filled.NavigateBefore" OnClick="@(() => { if (Page > 1) { Page = Page - 1; } OnPage.InvokeAsync(Page); })"></MudIconButton>
+                <MudIconButton Size="@(BrowserService.mobile ? Size.Medium : Size.Small)" Icon="@Icons.Filled.NavigateNext" OnClick="@(() => { if (Page < TotalPage) { Page = Page + 1; } OnPage.InvokeAsync(Page); })"></MudIconButton>
+                <MudIconButton Size="@(BrowserService.mobile ? Size.Medium : Size.Small)" Icon="@Icons.Filled.LastPage" OnClick="@(() => { if (Page != TotalPage) { Page = TotalPage; } OnPage.InvokeAsync(Page); })"></MudIconButton>
+            </div>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
+@code {
+    // Demonstrates how a parent component can supply parameters
+    [Parameter]
+    public long Length { get; set; }
+
+    [Parameter]
+    public long Page { get; set; } = 1;
+
+    [Parameter]
+    public int PageSize { get; set; } = MyHttp.PageSize;
+
+    [Parameter]
+    public int Elevation { get; set; } = 2;
+
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public bool Outlined { get; set; } = false;
+
+    public long TotalPage
+    {
+        get
+        {
+            if (PageSize == 0) return 0;
+            long total = (Length / PageSize);
+            if (Length % PageSize > 0) { total++; }
+            return total;
+        }
+    }
+
+    [Parameter]
+    public EventCallback<long> OnPage { get; set; }
+}

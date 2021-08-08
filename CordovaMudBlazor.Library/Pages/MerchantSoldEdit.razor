@@ -1,0 +1,147 @@
+﻿@page "/merchantsoldedit"
+
+@using System.Threading;
+@inject NavigationManager navMan
+@inject IJSRuntime jrt
+@inject SessionState ss
+@*@inject Blazored.SessionStorage.ISessionStorageService sessionStorage*@
+@inject MyHttp Http
+
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudText Typo="Typo.h6">ITEM SALES EDIT</MudText>
+        <hr />
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.ShortDomain" Margin="Margin.Dense" Label="Short Domain"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.ItemId" Margin="Margin.Dense" Label="Item ID"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.Merchant" Margin="Margin.Dense" Label="Merchant"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.Quantity" Margin="Margin.Dense" Label="Quantity"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.SoldPrice" Margin="Margin.Dense" Label="Sold Price"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.TotalQuantity" Margin="Margin.Dense" Label="Total Quantity"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.TotalSoldPrice" Margin="Margin.Dense" Label="Total Sold Price"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudTextField @bind-Value="@Data.AveragePrice" Margin="Margin.Dense" Label="Average Price"></MudTextField>
+    </MudItem>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudIconButton Icon="@Icons.Material.ArrowBack" Size="Size.Small" OnClick="@(() => Back())"></MudIconButton>
+        <MudIconButton Icon="@Icons.Material.Save" Size="Size.Small" OnClick="@(() => Save())"></MudIconButton>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public class DomainType
+    {
+        public string TypeName { get; set; }
+        public string TypeID { get; set; }
+    }
+
+    [Parameter]
+    public string merchantsoldid { get; set; } //MerchantSold ID
+
+    [Parameter]
+    public string itemid { get; set; } //MerchantSold ID
+
+    public List<DomainType> types = new List<DomainType>();
+    public DomainType TypeSelected = null;
+    public MerchantSold Data = new MerchantSold();
+    public Item m { get; set; }
+    public static string Id = string.Empty;
+
+    void Back()
+    {
+        var query = new Dictionary<string, string> { { "itemid", m?.Id } };
+        navMan.NavigateTo(QueryHelpers.AddQueryString("merchantsoldlist", query));
+    }
+
+    async void Save()
+    {
+        if (string.IsNullOrEmpty(ss.Token)) { navMan.NavigateTo("login"); return; }
+        if (TypeSelected != null)
+        {
+            Data.ShortDomain = TypeSelected.TypeID;
+        }
+
+        if (string.IsNullOrEmpty(Data.Id))
+        {
+            await Http.PostJsonAsync<MerchantSold, string>("api/table/Add?table=MerchantSold", Data);
+        }
+        else
+        {
+            await Http.PostJsonAsync<MerchantSold, string>("api/table/Edit?table=MerchantSold", Data);
+        }
+        navMan.NavigateTo("merchantlist");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (string.IsNullOrEmpty(ss.Token))
+        {
+            navMan.NavigateTo("login");
+            return;
+        }
+
+        if (firstRender)
+        {
+            Id = string.Empty;
+        }
+        firstRender = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrEmpty(ss.Token)) { navMan.NavigateTo("login"); return; }
+        var uri = navMan.ToAbsoluteUri(navMan.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValueNoCase("merchantsoldid", out var param))
+            merchantsoldid = param;
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValueNoCase("itemid", out var param2))
+            itemid = param2;
+
+        if (string.IsNullOrEmpty(merchantsoldid) == false)
+        {
+            var sm = await Http.GetJsonAsync<StatusResult<MerchantSold>>("api/table/Get?table=MerchantSold&eid=" + merchantsoldid);
+            if (sm != null && sm.Result != null && sm.Result.Length > 0)
+            {
+                Data = sm.Result[0];
+            }
+        }
+        if (Data == null)
+        {
+            Data = new MerchantSold();
+        }
+
+        types.Add(new DomainType { TypeName = "shopee", TypeID = "shopee" });
+
+        if (string.IsNullOrEmpty(itemid) == false)
+        {
+            var sm = await Http.GetJsonAsync<StatusResult<Item>>("api/table/Get?table=Item&eid=" + itemid);
+            if (sm != null && sm.Result != null && sm.Result.Length > 0)
+            {
+                m = sm.Result[0];
+            }
+        }
+
+        if (Data != null)
+        {
+            TypeSelected = types.Where(m => m.TypeID == Data.ShortDomain).FirstOrDefault();
+        }
+
+        BrowserService.StateHasChanged = new Action(StateHasChanged);
+    }
+}
+

@@ -1,0 +1,24 @@
+﻿@inject IJSRuntime jrt
+@inject MyHttp Http
+
+<Router AppAssembly="@typeof(App).Assembly" OnNavigateAsync="OnNavigateAsync">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    </Found>
+    <NotFound>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p>Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code{
+    private async Task OnNavigateAsync(NavigationContext context)
+    {
+        var cookies = ""; //DO THIS INSTEAD : Read cookies from browser
+        if (string.IsNullOrEmpty(cookies) == false)
+        {
+            BrowserService.token = cookies;
+        }
+    }
+}

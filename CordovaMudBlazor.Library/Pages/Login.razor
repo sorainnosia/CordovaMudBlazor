@@ -1,0 +1,105 @@
+﻿@page "/login"
+@inherits BasePage
+@inject NavigationManager navMan
+@inject IJSRuntime jrt
+@inject MyHttp Http
+
+<MudGrid Style="height:calc(100vh - 64px);">
+    <MudItem xs="12" sm="12" lg="4" md="4" Style="margin:auto auto;">
+        <MudPaper Outlined="true" Class="pa-3 mb-3">
+            <MudGrid>
+                <MudItem xs="12" sm="12" lg="12" md="12" Style="text-align:center">
+                    <div><img src="icon-512.png" width="100px" /></div>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12" Style="text-align:center">
+                    <MudText Typo="Typo.h6">Sign-In</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudTextField @bind-Value="@Username" AutoFocus="true" Immediate="true" @ref="txtEmail"  Margin="Margin.Dense" Label="Email" OnKeyDown="@(m => { first = true; })" Text="admin"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudTextField @bind-Value="@Password" Immediate="true" InputType="InputType.Password" Margin="Margin.Dense" Label="Password" OnKeyPress="@(m => { KeyPress(m); })" OnKeyDown="@(m => { first = true; })" Text="admin"></MudTextField>
+                </MudItem>
+                @if (string.IsNullOrEmpty(Cookie) && first == false)
+                {
+                    <MudItem xs="12" sm="12" lg="12" md="12">
+                        <MudAlert Severity="Severity.Error">Invalid username and password</MudAlert>
+                    </MudItem>
+                }
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudIconButton Icon="@Icons.Filled.ArrowBack" Size="Size.Small" OnClick="@(() => Back())"></MudIconButton>
+                    <MudButton Variant="@Variant.Outlined" @ref="txtSignIn" Disabled="@Disabled" Size="Size.Small" OnClick="@(() => SignIn())">@Text</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+    @code  {
+        public static bool first = true;
+        public string Username = "admin";
+        public string Password = "admin";
+        public string Cookie = string.Empty;
+        private MudTextField<string> txtEmail;
+        private MudButton txtSignIn;
+        private string Text = "Sign In";
+        private bool Disabled = false;
+
+        private void KeyPress(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs m)
+        {
+            //txtEmail.FocusAsync();
+            first = true;
+            if (m.Key == "Enter")
+            {
+                SignIn();
+            }
+        }
+
+        void Back()
+        {
+            navMan.NavigateTo("login");
+        }
+
+        async void SignIn()
+        {
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
+            {
+                first = false;
+                base.StateHasChanged();
+                return;
+            }
+
+            Text = "Loading...";
+            Disabled = true;
+            base.StateHasChanged();
+
+            Cookie = "1234";
+            BrowserService.token = Cookie;
+            // Login and get cookies
+            //Cookie = await Http.PostJsonAsync<WebUser, string>(loginurl, wu);
+
+            Text = "Sign In";
+            Disabled = false;
+            base.StateHasChanged();
+
+            if (Cookie == "\"\"") Cookie = string.Empty;
+            if (string.IsNullOrEmpty(Cookie) == false)
+            {
+                //DO HERE : Write cookies to browser
+                BrowserService.token = Cookie;
+
+                if (BrowserService.wwwasset == "/android_asset/www/")
+                    navMan.NavigateTo("index.html");
+                else
+                    navMan.NavigateTo("/");
+                return;
+            }
+            first = false;
+            base.StateHasChanged();
+        }
+
+        public async Task Redirect(string url)
+        {
+            bool a = await jrt.InvokeAsync<bool>("redirect", url); ;
+        }
+    }

@@ -1,0 +1,49 @@
+.popout {
+    animation: popout 300ms ease;
+    -webkit-animation: popout 300ms ease;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+/* This is the class name given by the Font Awesome component when icon contains 'spinner' */
+.fa-spinner {
+    /* Apply 'spinner' keyframes looping once every second (1s)  */
+    animation: spinner 1s linear infinite;
+}
+
+@keyframes popout {
+    from {
+        transform: scale(0)
+    }
+
+    80% {
+        transform: scale(1.2)
+    }
+
+    to {
+        transform: scale(1)
+    }
+}
+
+@-webkit-keyframes popout {
+    from {
+        -webkit-transform: scale(0)
+    }
+
+    80% {
+        -webkit-transform: scale(1.2)
+    }
+
+    to {
+        -webkit-transform: scale(1)
+    }
+}
+
+.fadeout {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 2s, opacity 2s linear;
+}

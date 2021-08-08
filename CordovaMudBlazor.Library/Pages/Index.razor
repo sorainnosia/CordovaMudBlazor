@@ -1,0 +1,39 @@
+﻿@page "/index.html"
+@inherits BasePage
+@inject IJSRuntime jrt
+@inject NavigationManager navMan
+
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudText Typo="Typo.h6">CORDOVAMUDBLAZOR</MudText>
+        <hr />
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        @if (string.IsNullOrEmpty(token))
+        {
+            <span>Click to</span> <MudButton OnClick="@(() => { Redirect("login"); } )">Login</MudButton>
+        }
+        else
+        {
+            <span>Click Menu to start using</span>
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    string token = "";
+
+    public Task Redirect(string url)
+    {
+        navMan.NavigateTo(url);
+        return Task.CompletedTask;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = BrowserService.GetToken();
+        base.StateHasChanged();
+    }
+}

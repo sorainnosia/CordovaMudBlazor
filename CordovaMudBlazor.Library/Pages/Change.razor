@@ -1,0 +1,102 @@
+﻿@page "/change"
+
+@inherits ProtectedPage
+@inject MyHttp Http
+
+<MudGrid Style="height:calc(100vh - 64px);">
+    <MudItem xs="12" sm="12" lg="4" md="4" Style="margin:auto auto;">
+        <MudPaper Outlined="true" Class="pa-3 mb-3">
+            <MudGrid>
+                <MudItem xs="12" sm="12" lg="12" md="12" Style="text-align:center">
+                    <div><img src="icon-512.png" width="100px" /></div>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12" Style="text-align:center">
+                    <MudText Typo="Typo.h6">Change Password</MudText>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudTextField @bind-Value="@Password" AutoFocus="true" Immediate="true" InputType="InputType.Password" Label="Old Password" OnKeyDown="@(m => { first = true; })"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudTextField @bind-Value="@ConfirmPassword" Immediate="true" InputType="InputType.Password" Label="New Password" OnKeyDown="@(m => { first = true; })"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudTextField @bind-Value="@ConfirmPassword2" Immediate="true" InputType="InputType.Password" Label="New Password Again" OnKeyPress="@(m => { KeyPress(m); })" OnKeyDown="@(m => { first = true; })"></MudTextField>
+                </MudItem>
+                @if (first == false)
+                {
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudAlert Severity="Severity.Error">@Msg</MudAlert>
+                </MudItem>
+                }
+                <MudItem xs="12" sm="12" lg="12" md="12">
+                    <MudButton Icon="@Icons.Filled.Lock" Size="Size.Small" Disabled="@Disabled" Variant="Variant.Outlined" OnClick="@(() => ChangePassword())">@Text</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+@code {
+    public static bool first = true;
+    public string Username = string.Empty;
+    public string Password = string.Empty;
+    public string ConfirmPassword = string.Empty;
+    public string ConfirmPassword2 = string.Empty;
+    public string Msg = string.Empty;
+    public string Text  = "Change Password";
+    public bool Disabled = false;
+
+    private void KeyPress(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs m)
+    {
+        //Immediate="true" need to be true, if not when user type password fast and press Enter
+        //The ChangePassword will get Data.ConfirmPassword2 = null even though user type it, the Event
+        //is a bit late in binding the type input to variable, to make it fast set Immediate to true
+        //txtEmail.FocusAsync();
+        first = true;
+        if (m.Key == "Enter")
+        {
+            ChangePassword();
+        }
+    }
+
+    void Back()
+    {
+        navMan.NavigateTo("login");
+    }
+
+    async void ChangePassword()
+    {
+        if (string.IsNullOrEmpty(Password) ||string.IsNullOrEmpty(ConfirmPassword))
+        {
+            first = false;
+            Msg = "Please enter old password and new password";
+            base.StateHasChanged();
+            return;
+        }
+        if (ConfirmPassword != ConfirmPassword2)
+        {
+            first = false;
+            Msg = "New password does not match";
+            base.StateHasChanged();
+            return;
+        }
+
+        Text = "Loading...";
+        Disabled = true;
+        base.StateHasChanged();
+
+        //Do Http Request here
+
+        Text = "Change Password";
+        Disabled = false;
+        base.StateHasChanged();
+
+        if (Msg == "success")
+        {
+            navMan.NavigateTo("logout");
+            return;
+        }
+        first = false;
+        base.StateHasChanged();
+    }
+
+}

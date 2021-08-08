@@ -1,0 +1,27 @@
+﻿@page "/logout"
+@inherits ProtectedPage
+@inject NavigationManager navMan
+@inject IJSRuntime jrt
+
+<h1>Logout</h1>
+
+You are now logged out from the system
+
+@code {
+    public async Task Redirect(string url)
+    {
+        bool a = await jrt.InvokeAsync<bool>("redirect", url); ;
+    }
+
+    public async Task NavigateLogout()
+    {
+        // DO HERE - Delete Cookies from browser
+        BrowserService.token = "";
+        navMan.NavigateTo("login");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await NavigateLogout();
+    }
+}

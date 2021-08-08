@@ -1,0 +1,71 @@
+﻿@page "/categories"
+@inherits ProtectedPage
+@inject IJSRuntime jrt
+@inject NavigationManager navMan
+
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        <MudText Typo="Typo.h6">CATEGORIES</MudText>
+        <hr />
+    </MudItem>
+</MudGrid>
+<MudGrid>
+    <MudItem xs="12" sm="12" lg="12" md="12">
+        @if (Data != null)
+        {
+            <MudTable Items="@Data" Dense="true" Class="ma-0 pa-2" Hover="true" Breakpoint="Breakpoint.Sm">
+                <HeaderContent>
+                    <MudTh Class="ma-0 pa-2">Id</MudTh>
+                    <MudTh Class="ma-0 pa-2">Name</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Id">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.Id</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                    <MudTd Class="ma-0 pa-2" DataLabel="Name">
+                        <MudGrid>
+                            <MudItem Class="ma-0 pa-2" xs="12" sm="12" lg="12" md="12">
+                                <MudText>@context.Name</MudText>
+                            </MudItem>
+                        </MudGrid>
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    string token = "";
+    Category[] Data = null;
+
+    public Task Redirect(string url)
+    {
+        navMan.NavigateTo(url);
+        return Task.CompletedTask;
+    }
+
+    public async void Refresh()
+    {
+        try
+        {
+            Data = await http.GetFromJsonAsync<Category[]>("/api/category/getcategories?page=1");
+        } catch {}
+        if (Data == null)
+        {
+            CategoryController c = new CategoryController();
+            Data = c.GetCategories(1);
+        }
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Refresh();
+    }
+}

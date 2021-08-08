@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	<BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+	<BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
+	<BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+	<InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="_content2\**" />
+    <Compile Remove="_content\**" />
+    <Content Remove="_content2\**" />
+    <Content Remove="_content\**" />
+    <EmbeddedResource Remove="_content2\**" />
+    <EmbeddedResource Remove="_content\**" />
+    <None Remove="_content2\**" />
+    <None Remove="_content\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ServiceExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CordovaMudBlazor.Library\CordovaMudBlazor.Library.csproj" />
+  </ItemGroup>
+
+  
+</Project>
