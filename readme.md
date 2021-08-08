@@ -2,6 +2,7 @@
 
 ## Sample
 ![CordovaMudBlazor](https://user-images.githubusercontent.com/19261780/128637079-a01d05e0-1ba7-468f-b956-4cb59168bf18.gif){:height="50%" width="50%"}
+<img src="https://user-images.githubusercontent.com/19261780/128637079-a01d05e0-1ba7-468f-b956-4cb59168bf18.gif" width="200">
 
 ## Description
 A patching program that patch the Publish output of Blazor WASM created using .NET Core 5.0.8 and MudBlazor component to be able to run in Cordova project
