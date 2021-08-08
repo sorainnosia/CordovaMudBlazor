@@ -88,4 +88,4 @@ and make sure Index.razor is
 Then test running it in the browser.
 
 ## Thanks to
-Blazor.Cordova [Blazor.Cordova!](https://github.com/BickelLukas/Blazor.Cordova)
+[Blazor.Cordova!](https://github.com/BickelLukas/Blazor.Cordova)
