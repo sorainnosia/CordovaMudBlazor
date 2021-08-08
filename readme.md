@@ -1,7 +1,6 @@
 # CordovaMudBlazor
 
 ## Sample
-![CordovaMudBlazor](https://user-images.githubusercontent.com/19261780/128637079-a01d05e0-1ba7-468f-b956-4cb59168bf18.gif){:height="50%" width="50%"}
 <img src="https://user-images.githubusercontent.com/19261780/128637079-a01d05e0-1ba7-468f-b956-4cb59168bf18.gif" width="200">
 
 ## Description
