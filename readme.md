@@ -35,7 +35,7 @@ cordova plugin add cordova-plugin-advanced-http
 Once all successful, you have a Cordova www folder.
 Build CordovaMudBlazorPatch project and copy the output (exe, dll, and json files) to the root of CordovaMudBlazor project
 
-Copy Blazor WASM wwwroot folder into the Cordova www folder and run command
+Copy Blazor WASM wwwroot folder into the Cordova www folder's all content and run command
 ```
 CordovaMudBlazorPatch.exe /all
 ```
