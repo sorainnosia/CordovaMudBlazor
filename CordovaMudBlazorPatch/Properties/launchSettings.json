@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CordovaMudBlazorPatch": {
+      "commandName": "Project",
+      "commandLineArgs": "/aaptoptionsignore"
+    }
+  }
+}
