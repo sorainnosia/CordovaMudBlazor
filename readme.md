@@ -35,6 +35,7 @@ Copy Blazor WASM wwwroot folder into the Cordova www folder and run command
 ```
 CordovaMudBlazorPatch.exe /all
 ```
+Now you are ready to build the cordova project and test building APK and test running the APK
 
 ## CordovaMudBlazorPatch
 This program is a rough patching software, it patches build.gradle, AndroidManifest.xml, index.html, MudBlazor css file, MudBlazor js file and other css files.
