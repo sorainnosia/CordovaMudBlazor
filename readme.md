@@ -79,3 +79,4 @@ and make sure Index.razor is
 ```
 @page "/"
 ```
+Then test running it in the browser.
