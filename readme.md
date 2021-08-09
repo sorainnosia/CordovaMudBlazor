@@ -87,5 +87,34 @@ and make sure Index.razor is
 ```
 Then test running it in the browser.
 
+## Important Note
+Whenever you input a Href or Link attribute, the value should be prepended with "/android_asset/www"
+Example
+```
+<MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Products")">Products</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="@(BrowserService.wwwasset + "Stocks")">Stocks</MudNavLink>
+</MudNavMenu>
+```
+Where you have a class name BrowserService.cs
+```
+public class BrowserService
+{
+    // Compile to APK (Cordova)
+    public static string wwwasset = "/android_asset/www/";
+    // Compile to Web
+    //public static string wwwasset = "/";
+}
+```
+However whenever you are using NavigationManager.NavigateTo, you don't need to specify the BrowserService.wwwasset
+```
+[Inject] protected NavigationManager navMan { get; set; }
+public void GoLogin()
+{
+    navMan.NavigateTo("login");
+}
+```
+CordovaMudBlazorPatch will patch index.html to have <base href="file:///android_asset/www/"> this is needed so that the dynamic routing of @page "email/{folder?}" will work. Without setting the base href in index.html and only relying on prepending "android_asset/www" to relative url will only make pages that do not have dynamic/complex routing to work and leaving pages with dynamic routing becomes error.
+
 ## Thanks to
 [Blazor.Cordova](https://github.com/BickelLukas/Blazor.Cordova)
