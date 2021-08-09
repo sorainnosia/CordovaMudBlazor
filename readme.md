@@ -114,7 +114,11 @@ public void GoLogin()
     navMan.NavigateTo("login");
 }
 ```
-CordovaMudBlazorPatch will patch index.html to have <base href="file:///android_asset/www/"> this is needed so that the dynamic routing of @page "email/{folder?}" will work. Without setting the base href in index.html and only relying on prepending "android_asset/www" to relative url will only make pages that do not have dynamic/complex routing to work and leaving pages with dynamic routing becomes error.
+CordovaMudBlazorPatch will patch index.html to have
+```
+<base href="file:///android_asset/www/">
+```
+this is needed so that the dynamic routing of @page "email/{folder?}" will work. Without setting the base href in index.html and only relying on prepending "android_asset/www" to relative url will only make pages that do not have dynamic/complex routing to work and leaving pages with dynamic routing becomes error.
 
 ## Thanks to
 [Blazor.Cordova](https://github.com/BickelLukas/Blazor.Cordova)
