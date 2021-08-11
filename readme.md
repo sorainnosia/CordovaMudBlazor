@@ -120,5 +120,56 @@ CordovaMudBlazorPatch will patch index.html to have
 ```
 this is needed so that the dynamic routing of @page "email/{folder?}" will work. Without setting the base href in index.html and only relying on prepending "android_asset/www" to relative url will only make pages that do not have dynamic/complex routing to work and leaving pages with dynamic routing becomes error.
 
+## MudBlazor.AdminDashboard Sample
+<img src="https://user-images.githubusercontent.com/19261780/128962021-f68e7aa7-a054-4418-af1a-a20f18a74e96.gif" width="200">
+
+CordovaMudBlazorPatch works with MudBlazor 5.1.0 using ThemeManager 1.0.5 with some minor changes, for example it works with MudBlazor.AdminDashboard
+* Try getting the source code of AdminDashboard https://github.com/Garderoben/MudBlazor.Templates/tree/master/MudBlazor.Template.AdminDashboard
+* Open the solution file using Visual Studio, and then create a class in AdminDashboard.Wasm project
+```
+public class BrowserService
+{
+    // Compile to APK (Cordova)
+    public static string wwwasset = "/android_asset/www";
+    // Compile to Web
+    //public static string wwwasset = "/";
+}
+```
+* Search in AdminDashboard.wasm project for the word "application" then when it is a Link or Href, modify it to become below (MudNavLink is example) which prepends it with BrowserService.www string
+```
+<MudNavLink Href="**@(BrowserService.www + "**/application/chat**")**" 
+```
+* Do the same for the word "pages" and "personal", you might notice some link does not starts with "/", add it to the link because BrowserService.www does not ends with a slash "/"
+```
+<MudNavLink Href="@(BrowserService.www + "/application/chat")" Icon="@Icons.Material.Outlined.Forum">Chat</MudNavLink>
+...
+<MudNavLink Href="@(BrowserService.www + "/personal/account")" Icon="@Icons.Material.Outlined.Person">Account</MudNavLink>
+...
+<MudNavLink Href="@(BrowserService.www + "/pages/authentication/login")" Icon="@Icons.Material.Outlined.InsertDriveFile">Login</MudNavLink>
+...
+```
+* Open Dashboard.razor file under below
+```
+@page "/personal/dashboard"
+```
+* Makes it to have another route
+```
+@page "/personal/dashboard"
+@page "/index.html"
+```
+* Build AdminDashboard.Wasm project
+* Create a new Cordova Android project describe in How to Use section
+* Publish AdminDashboard.Wasm project, then go to the published folder, there is a folder name wwwroot, copy all files inside to the www folder of the cordova project (by first emptying the www folder)
+* Build CordovaMudBlazorPatch project from this repository and copy the output (exe, dll, and json files) to the root of cordova project where www folder resides then run below command
+```
+CordovaMudBlazorPatch.exe /all
+```
+* Then you can build the cordova project and run the APK, which will show above result
+ 
 ## Thanks to
 [Blazor.Cordova](https://github.com/BickelLukas/Blazor.Cordova)
+[MudBlazor.ThemeManager](https://github.com/Garderoben/MudBlazor.ThemeManager)
+[MudBlazor.Templates](https://github.com/Garderoben/MudBlazor.Templates)
+[MudBlazor](https://github.com/Garderoben/MudBlazor)
+
+Special thanks to Garderoben to upgrade the ThemeManager package and AdminDashboard package so that now MudBlazor components can run in Cordova with Theme enabled.
