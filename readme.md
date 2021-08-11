@@ -5,7 +5,8 @@
 
 ## Description
 A patching program that patch the Publish output of Blazor WASM created using .NET Core 5.0.8 and MudBlazor component to be able to run in Cordova project.
-Using this project for other Blazor also works, but specific changes that targeting MudBlazor will not be applied. 
+
+Using this project for other Blazor projects also works and does not necessary couple with MudBlazor components, but this project has some patches done specifically for MudBlazor components.
 
 ## How to use
 Run command prompt in Administrator mode, navigate to root of this project
