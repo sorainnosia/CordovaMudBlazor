@@ -137,7 +137,7 @@ public class BrowserService
 ```
 * Search in AdminDashboard.wasm project for the word "application" then when it is a Link or Href, modify it to become below (MudNavLink is example) which prepends it with BrowserService.www string
 ```
-<MudNavLink Href="**@(BrowserService.www + "**/application/chat**")**" 
+<MudNavLink Href="@(BrowserService.www + "/application/chat")" 
 ```
 * Do the same for the word "pages" and "personal", you might notice some link does not starts with "/", add it to the link because BrowserService.www does not ends with a slash "/"
 ```
