@@ -148,7 +148,7 @@ public class BrowserService
 <MudNavLink Href="@(BrowserService.www + "/pages/authentication/login")" Icon="@Icons.Material.Outlined.InsertDriveFile">Login</MudNavLink>
 ...
 ```
-* Open Dashboard.razor file under below
+* Open Dashboard.razor file, under below
 ```
 @page "/personal/dashboard"
 ```
