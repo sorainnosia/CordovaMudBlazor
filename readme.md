@@ -169,7 +169,7 @@ CordovaMudBlazorPatch.exe /all
 ## Thanks to
 * [Blazor.Cordova](https://github.com/BickelLukas/Blazor.Cordova) (Description of method to modify instantiateStreaming to makes Blazor works in Cordova)
 * [MudBlazor.ThemeManager](https://github.com/Garderoben/MudBlazor.ThemeManager) (Makes theming of MudBlazor easy)
-* [MudBlazor.Templates](https://github.com/Garderoben/MudBlazor.Templates) (AdminDashboard project whichc is a sample project of using MudBlazor with Themes)
+* [MudBlazor.Templates](https://github.com/Garderoben/MudBlazor.Templates) (AdminDashboard project, a sample project of using MudBlazor with Themes)
 * [MudBlazor](https://github.com/Garderoben/MudBlazor) (Open Source Blazor Components)
 
 Special thanks to Garderoben to upgrade the ThemeManager package and AdminDashboard package so that now MudBlazor components can run in Cordova with Theme enabled.
