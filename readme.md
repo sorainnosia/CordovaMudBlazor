@@ -39,7 +39,7 @@ Build CordovaMudBlazorPatch project and copy the output (exe, dll, and json file
 
 Copy published Blazor WASM wwwroot folder's content and copy into the Cordova www folder and run command
 ```
-CordovaMudBlazorPatch.exe /all
+CordovaMudBlazorPatch.exe /all /force
 ```
 Now you are ready to build the cordova project and test building APK and test running the APK
 
@@ -68,7 +68,7 @@ and the other portion becomes like below
 
 Run the command
 ```
-CordovaMudBlazorPatch.exe /all
+CordovaMudBlazorPatch.exe /all /force
 ```
 
 Now you can test it by running
@@ -164,7 +164,7 @@ public class BrowserService
 * Publish AdminDashboard.Wasm project, then go to the published folder, there is a folder name wwwroot, copy all files inside to the www folder of the cordova project (by first emptying the www folder)
 * Build CordovaMudBlazorPatch project from this repository and copy the output (exe, dll, and json files) to the root of cordova project where www folder resides then run below command
 ```
-CordovaMudBlazorPatch.exe /all
+CordovaMudBlazorPatch.exe /all /force
 ```
 * Then you can build the cordova project and run the APK, which will show above result
  
